@@ -1,14 +1,12 @@
 package com.florido.workshopmongo.query;
 
 import com.florido.workshopmongo.domain.User;
+import org.mapstruct.Mapper;
 
-public class UserMapper {
+@Mapper(componentModel = "spring")
+public interface UserMapper {
 
-    public static UserDTO to(User user) {
-        return null;
-    }
+    UserDTO to(User user);
 
-    public static User to(UserDTO user) {
-        return null;
-    }
+    User to(UserDTO user);
 }

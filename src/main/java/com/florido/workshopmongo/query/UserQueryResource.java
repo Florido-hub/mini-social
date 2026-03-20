@@ -1,8 +1,10 @@
 package com.florido.workshopmongo.query;
 
 import com.florido.workshopmongo.domain.User;
+import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PagedModel;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -10,41 +12,34 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
 @RestController
-@RequestMapping("/users")
+@RequestMapping("/users/query")
+@RequiredArgsConstructor
 public class UserQueryResource {
 
     private final UserQueryService userQueryService;
-
-    public UserQueryResource(final UserQueryService userQueryService) {
-        this.userQueryService = userQueryService;
-    }
+    private final UserMapper userMapper;
 
     @GetMapping
-    public ResponseEntity<PagedModel<UserDTO>> all() {
-        Page<User> page = userQueryService.findAll();
+    public ResponseEntity<PagedModel<UserDTO>> all(Pageable pageRequest) {
+        Page<User> page = userQueryService.findAll(pageRequest);
 
-        List<UserDTO> usersDto = new ArrayList<>();
-        for (User u : page.getContent()) {
-            UserDTO userDTO = UserMapper.to(u);
-            usersDto.add(userDTO);
-        }
+        List<UserDTO> usersDto = page.getContent().stream().map(userMapper::to).toList();
 
-        Page<UserDTO> pageDto = new PageImpl<>(usersDto, page.getPageable(), page.getTotalPages());
+        Page<UserDTO> pageDto = new PageImpl<>(usersDto, page.getPageable(), page.getTotalElements());
 
         PagedModel<UserDTO> pagedModel = new PagedModel<>(pageDto);
 
-        return ResponseEntity.ok(pagedModel);
+        return ResponseEntity.ok().body(pagedModel);
     }
 
-    @GetMapping("/{id}")
-    public ResponseEntity<UserDTO> one(@PathVariable UUID id) {
-        Optional<User> userOpt = userQueryService.findById(id.toString());
+    @GetMapping("/id/{id}")
+    public ResponseEntity<UserDTO> getById(@PathVariable String id) {
+        Optional<User> userOpt = userQueryService.findById(id);
 
         if (userOpt.isEmpty()) {
             return ResponseEntity.notFound().build();
@@ -52,13 +47,13 @@ public class UserQueryResource {
 
         User user = userOpt.get();
 
-        UserDTO userDTO = UserMapper.to(user);
+        UserDTO userDTO = userMapper.to(user);
 
         return ResponseEntity.ok(userDTO);
     }
 
-    @GetMapping("/{username}")
-    public ResponseEntity<UserDTO> one(@PathVariable String username) {
+    @GetMapping("/username/{username}")
+    public ResponseEntity<UserDTO> getByUsername(@PathVariable String username) {
         Optional<User> userOpt = userQueryService.findByUsername(username);
 
         if (userOpt.isEmpty()) {
@@ -67,7 +62,7 @@ public class UserQueryResource {
 
         User user = userOpt.get();
 
-        UserDTO userDTO = UserMapper.to(user);
+        UserDTO userDTO = userMapper.to(user);
 
         return ResponseEntity.ok(userDTO);
     }

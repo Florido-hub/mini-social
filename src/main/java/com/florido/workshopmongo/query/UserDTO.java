@@ -1,4 +1,9 @@
 package com.florido.workshopmongo.query;
 
-public class UserDTO {
+public record UserDTO (
+    String id,
+    String name,
+    String email
+){
+
 }
