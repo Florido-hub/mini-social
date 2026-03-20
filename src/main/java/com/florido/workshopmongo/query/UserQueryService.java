@@ -8,6 +8,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PagedModel;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -19,19 +20,19 @@ public class UserQueryService {
         this.userRepository = userRepository;
     }
 
-    public Page<User> findAll() {
-        return Page.empty();
+    public Page<User> findAll(Pageable pageable) {
+        return userRepository.findAll(pageable);
     }
 
     public Optional<User> findById(String id) {
-        return Optional.empty();
+        return userRepository.findById(id);
     }
 
     public Optional<User> findByUsername(String username) {
-        return Optional.empty();
+        return Optional.of(userRepository.findByName(username));
     }
 
     public Optional<User> findByEmail(String email) {
-        return Optional.empty();
+        return Optional.of(userRepository.findByEmail(email));
     }
 }
