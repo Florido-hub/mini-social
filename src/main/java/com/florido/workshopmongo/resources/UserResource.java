@@ -12,14 +12,7 @@ import org.springframework.web.bind.annotation.RestController;
 import java.util.List;
 
 @RestController
-@RequestMapping(value = "/users")
 @RequiredArgsConstructor
 public class UserResource {
-
-    private final UserService userService;
-
-    @GetMapping
-    public ResponseEntity<List<User>> findAll() {
-        return ResponseEntity.ok().body(userService.findAll());
-    }
+    
 }

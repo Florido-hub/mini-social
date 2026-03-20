@@ -17,7 +17,7 @@ import java.util.Optional;
 import java.util.UUID;
 
 @RestController
-@RequestMapping("/users/query")
+@RequestMapping("/users")
 @RequiredArgsConstructor
 public class UserQueryResource {
 
