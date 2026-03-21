@@ -1,4 +1,4 @@
-package com.florido.workshopmongo.domain;
+package com.florido.workshopmongo.common.model.document;
 
 
 import lombok.Data;

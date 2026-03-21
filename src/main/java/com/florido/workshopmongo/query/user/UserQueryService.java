@@ -1,7 +1,7 @@
-package com.florido.workshopmongo.query;
+package com.florido.workshopmongo.query.user;
 
-import com.florido.workshopmongo.domain.User;
-import com.florido.workshopmongo.repository.UserRepository;
+import com.florido.workshopmongo.common.model.document.User;
+import com.florido.workshopmongo.common.repository.UserRepository;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;

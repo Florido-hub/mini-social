@@ -1,4 +1,4 @@
-package com.florido.workshopmongo.query;
+package com.florido.workshopmongo.query.user;
 
 public record UserDTO (
     String id,

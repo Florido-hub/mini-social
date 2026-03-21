@@ -1,8 +1,8 @@
 package com.florido.workshopmongo.command.user;
 
-import com.florido.workshopmongo.domain.User;
-import com.florido.workshopmongo.query.UserDTO;
-import com.florido.workshopmongo.repository.UserRepository;
+import com.florido.workshopmongo.common.model.document.User;
+import com.florido.workshopmongo.query.user.UserDTO;
+import com.florido.workshopmongo.common.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 

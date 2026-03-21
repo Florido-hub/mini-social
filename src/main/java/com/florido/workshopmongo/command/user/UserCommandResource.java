@@ -1,7 +1,7 @@
 package com.florido.workshopmongo.command.user;
 
-import com.florido.workshopmongo.domain.User;
-import com.florido.workshopmongo.query.UserDTO;
+import com.florido.workshopmongo.common.model.document.User;
+import com.florido.workshopmongo.query.user.UserDTO;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
