@@ -18,8 +18,7 @@ public class UserCommandService {
     public User create(User user) {
         return userRepository.save(user);
     }
-
-    // TODO: merge patch (RFC 7386)
+    
     public User update(String id, UserDTO patch) {
         Objects.requireNonNull(id, "id can't be blank");
 
