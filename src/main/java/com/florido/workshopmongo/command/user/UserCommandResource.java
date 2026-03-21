@@ -4,7 +4,6 @@ import com.florido.workshopmongo.common.model.document.User;
 import com.florido.workshopmongo.query.user.UserDTO;
 import com.florido.workshopmongo.common.mapper.UserMapper;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ProblemDetail;
 import org.springframework.http.ResponseEntity;
