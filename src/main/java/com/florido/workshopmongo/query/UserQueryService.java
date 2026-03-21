@@ -3,15 +3,14 @@ package com.florido.workshopmongo.query;
 import com.florido.workshopmongo.domain.User;
 import com.florido.workshopmongo.repository.UserRepository;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
-import org.springframework.data.web.PagedModel;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
-import java.util.List;
 import java.util.Optional;
 
 @Service
+@Transactional(readOnly = true)
 public class UserQueryService {
 
     private final UserRepository userRepository;
@@ -29,10 +28,10 @@ public class UserQueryService {
     }
 
     public Optional<User> findByUsername(String username) {
-        return Optional.of(userRepository.findByName(username));
+        return userRepository.findByName(username);
     }
 
     public Optional<User> findByEmail(String email) {
-        return Optional.of(userRepository.findByEmail(email));
+        return userRepository.findByEmail(email);
     }
 }
