@@ -1,6 +1,6 @@
-package com.florido.workshopmongo.query;
+package com.florido.workshopmongo.query.user;
 
-import com.florido.workshopmongo.domain.User;
+import com.florido.workshopmongo.common.model.document.User;
 import org.mapstruct.Mapper;
 
 @Mapper(componentModel = "spring")
