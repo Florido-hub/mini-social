@@ -1,5 +1,6 @@
 package com.florido.workshopmongo.query.user;
 
+import com.florido.workshopmongo.common.mapper.UserMapper;
 import com.florido.workshopmongo.common.model.document.User;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;

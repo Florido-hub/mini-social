@@ -6,6 +6,7 @@ import com.florido.workshopmongo.common.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.Objects;
 import java.util.Optional;
 
 @Service
@@ -20,11 +21,35 @@ public class UserCommandService {
 
     // TODO: merge patch (RFC 7386)
     public User update(String id, UserDTO patch) {
-        if (id.isBlank()) {
+        Objects.requireNonNull(id, "id can't be blank");
+
+        Optional<User> userOpt = userRepository.findById(id);
+
+        if (userOpt.isEmpty()) {
             throw new RuntimeException("user with id " + id + " not found");
         }
 
-        return new User();
+        User user = userOpt.get();
+
+        User merged = merge(user, patch);
+        userRepository.save(merged);
+
+        return merged;
+    }
+
+    private User merge(User user, UserDTO patch) {
+        User merged = new User();
+        merged.setId(user.getId());
+
+        if (patch.name() != null) {
+            merged.setName(patch.name());
+        }
+
+        if (patch.email() != null) {
+            merged.setEmail(patch.email());
+        }
+
+        return merged;
     }
 
     public User delete(User user) {
@@ -43,6 +68,7 @@ public class UserCommandService {
         }
 
         User user = userOpt.get();
+        userRepository.deleteById(id);
 
         return user;
     }
@@ -59,6 +85,7 @@ public class UserCommandService {
         }
 
         User user = userOpt.get();
+        userRepository.deleteUserByName(username);
 
         return user;
     }
