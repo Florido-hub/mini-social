@@ -28,7 +28,7 @@ public class UserQueryResource {
     public ResponseEntity<PagedModel<UserDTO>> all(Pageable pageRequest) {
         Page<User> page = userQueryService.findAll(pageRequest);
 
-        List<UserDTO> usersDto = page.getContent().stream().map(userMapper::to).toList();
+        List<UserDTO> usersDto = page.getContent().stream().map(userMapper::toDto).toList();
 
         Page<UserDTO> pageDto = new PageImpl<>(usersDto, page.getPageable(), page.getTotalElements());
 
@@ -47,7 +47,7 @@ public class UserQueryResource {
 
         User user = userOpt.get();
 
-        UserDTO userDTO = userMapper.to(user);
+        UserDTO userDTO = userMapper.toDto(user);
 
         return ResponseEntity.ok(userDTO);
     }
@@ -62,7 +62,7 @@ public class UserQueryResource {
 
         User user = userOpt.get();
 
-        UserDTO userDTO = userMapper.to(user);
+        UserDTO userDTO = userMapper.toDto(user);
 
         return ResponseEntity.ok(userDTO);
     }
