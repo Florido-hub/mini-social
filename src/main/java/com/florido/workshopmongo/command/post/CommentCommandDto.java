@@ -1,9 +1,13 @@
 package com.florido.workshopmongo.command.post;
 
-import com.florido.workshopmongo.query.post.AuthorDTO;
+import jakarta.validation.constraints.NotBlank;
 
 public record CommentCommandDto(
+
+        @NotBlank(message = "Campo obrigatorio")
         String text,
-        AuthorDTO author
+
+        @NotBlank(message = "Campo obrigatorio")
+        String idAuthor
 ) {
 }
