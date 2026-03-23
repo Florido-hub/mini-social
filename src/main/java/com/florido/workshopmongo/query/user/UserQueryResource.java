@@ -4,7 +4,6 @@ import com.florido.workshopmongo.common.mapper.PostMapper;
 import com.florido.workshopmongo.common.mapper.UserMapper;
 import com.florido.workshopmongo.common.model.document.Post;
 import com.florido.workshopmongo.common.model.document.User;
-import com.florido.workshopmongo.query.post.AuthorDTO;
 import com.florido.workshopmongo.query.post.PostDTO;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
