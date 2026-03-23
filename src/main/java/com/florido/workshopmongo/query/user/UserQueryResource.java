@@ -1,7 +1,11 @@
 package com.florido.workshopmongo.query.user;
 
+import com.florido.workshopmongo.common.mapper.PostMapper;
 import com.florido.workshopmongo.common.mapper.UserMapper;
+import com.florido.workshopmongo.common.model.document.Post;
 import com.florido.workshopmongo.common.model.document.User;
+import com.florido.workshopmongo.query.post.AuthorDTO;
+import com.florido.workshopmongo.query.post.PostDTO;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
@@ -23,6 +27,7 @@ public class UserQueryResource {
 
     private final UserQueryService userQueryService;
     private final UserMapper userMapper;
+    private final PostMapper postMapper;
 
     @GetMapping
     public ResponseEntity<PagedModel<UserDTO>> all(Pageable pageRequest) {
@@ -65,5 +70,27 @@ public class UserQueryResource {
         UserDTO userDTO = userMapper.toDto(user);
 
         return ResponseEntity.ok(userDTO);
+    }
+
+    @GetMapping("/{id}/posts")
+    public ResponseEntity<PagedModel<PostDTO>> allPosts(@PathVariable String id, Pageable pageRequest) {
+        Optional<User> userOpt = userQueryService.findById(id);
+
+        if (userOpt.isEmpty()) {
+            return ResponseEntity.notFound().build();
+        }
+
+        List<Post> posts = userOpt.get().getPosts();
+
+        List<PostDTO> postDto = posts
+                .stream()
+                .map(postMapper::toDto)
+                .toList();
+
+        Page<PostDTO> pageDto = new PageImpl<>(postDto, pageRequest, posts.size());
+
+        PagedModel<PostDTO> pagedModel = new PagedModel<>(pageDto);
+
+        return ResponseEntity.ok(pagedModel);
     }
 }
