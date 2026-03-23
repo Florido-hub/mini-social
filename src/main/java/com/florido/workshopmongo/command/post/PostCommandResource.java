@@ -2,12 +2,13 @@ package com.florido.workshopmongo.command.post;
 
 import com.florido.workshopmongo.command.user.UserCommandService;
 import com.florido.workshopmongo.common.mapper.PostMapper;
-import com.florido.workshopmongo.common.mapper.UserMapper;
+import com.florido.workshopmongo.common.model.document.Comment;
 import com.florido.workshopmongo.common.model.document.Post;
 import com.florido.workshopmongo.common.model.document.User;
 import com.florido.workshopmongo.common.resource.GenericResource;
 import com.florido.workshopmongo.query.post.AuthorDTO;
 import com.florido.workshopmongo.query.post.PostDTO;
+import com.florido.workshopmongo.query.post.PostQueryService;
 import com.florido.workshopmongo.query.user.UserQueryService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -27,7 +28,7 @@ public class PostCommandResource implements GenericResource {
 
     private final UserQueryService userQueryService;
     private final UserCommandService userCommandService;
-    private final UserMapper userMapper;
+    private final PostQueryService postQueryService;
 
     @PostMapping("/{id}")
     public ResponseEntity<PostDTO> createPost(
@@ -44,6 +45,7 @@ public class PostCommandResource implements GenericResource {
 
         Post post = new Post();
 
+        post.setId(null);
         post.setDate(new Date());
         post.setTitle(dto.title());
         post.setBody(dto.body());
@@ -53,10 +55,37 @@ public class PostCommandResource implements GenericResource {
 
         postCommandService.create(post);
 
-        userCommandService.update(id, userMapper.toDto(user));
+        userCommandService.create(user);
 
         PostDTO response = postMapper.toDto(post);
 
         return ResponseEntity.status(HttpStatus.CREATED).body(response);
+    }
+
+    @PostMapping("/{postId}/{id}/comments")
+    public ResponseEntity<Comment> createComment(
+            @PathVariable String postId,
+            @PathVariable String id,
+            @RequestBody CommentCommandDto dto){
+        Optional<Post> postOpt = postQueryService.findById(postId);
+        Optional<User> byId = userQueryService.findById(id);
+
+        if (postOpt.isEmpty() || byId.isEmpty()) {
+            return ResponseEntity.notFound().build();
+        }
+
+        Post post = postOpt.get();
+        User user = byId.get();
+
+        Comment comment = new Comment();
+        comment.setDate(new Date());
+        comment.setText(dto.text());
+        comment.setAuthor(new AuthorDTO(user));
+
+        post.getComments().add(comment);
+
+        postCommandService.create(post);
+
+        return ResponseEntity.status(HttpStatus.CREATED).body(comment);
     }
 }
