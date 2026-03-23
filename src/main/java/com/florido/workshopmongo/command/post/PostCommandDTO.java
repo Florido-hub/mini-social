@@ -1,7 +1,16 @@
 package com.florido.workshopmongo.command.post;
 
+import jakarta.validation.constraints.NotBlank;
+
 public record PostCommandDTO(
+
+        @NotBlank(message = "Campo obrigatorio")
         String title,
-        String body
+
+        @NotBlank(message = "Campo obrigatorio")
+        String body,
+
+        @NotBlank(message = "Campo obrigatorio")
+        String idAuthor
 ) {
 }
