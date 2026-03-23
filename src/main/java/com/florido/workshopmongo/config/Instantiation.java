@@ -4,6 +4,7 @@ import com.florido.workshopmongo.common.model.document.Post;
 import com.florido.workshopmongo.common.model.document.User;
 import com.florido.workshopmongo.common.repository.PostRepository;
 import com.florido.workshopmongo.common.repository.UserRepository;
+import com.florido.workshopmongo.query.post.AuthorDTO;
 import lombok.RequiredArgsConstructor;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.context.annotation.Configuration;
@@ -31,12 +32,12 @@ public class Instantiation implements CommandLineRunner {
         User leo = new User(null, "leo", "leo@gmail.com");
         User seneca = new User(null, "seneca", "seneca@gmail.com");
 
-        Post post1 = new Post(null, sdf.parse("21/03/2018"), "Partiu viagem", "Vou viajar para São Paulo", florido);
-        Post post2 = new Post(null, sdf.parse("23/03/2018"), "Bom dia", "Acordei feliz hoje", leo);
-
         userRepository.save(florido);
         userRepository.save(leo);
         userRepository.save(seneca);
+
+        Post post1 = new Post(null, sdf.parse("21/03/2018"), "Partiu viagem", "Vou viajar para São Paulo", new AuthorDTO(florido));
+        Post post2 = new Post(null, sdf.parse("23/03/2018"), "Bom dia", "Acordei feliz hoje", new AuthorDTO(leo));
 
         postRepository.save(post1);
         postRepository.save(post2);
