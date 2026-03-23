@@ -10,6 +10,7 @@ import com.florido.workshopmongo.query.post.AuthorDTO;
 import com.florido.workshopmongo.query.post.PostDTO;
 import com.florido.workshopmongo.query.post.PostQueryService;
 import com.florido.workshopmongo.query.user.UserQueryService;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -62,13 +63,12 @@ public class PostCommandResource implements GenericResource {
         return ResponseEntity.status(HttpStatus.CREATED).body(response);
     }
 
-    @PostMapping("/{postId}/{id}/comments")
+    @PostMapping("/{postId}/comments")
     public ResponseEntity<Comment> createComment(
             @PathVariable String postId,
-            @PathVariable String id,
-            @RequestBody CommentCommandDto dto){
+            @RequestBody @Valid CommentCommandDto dto){
         Optional<Post> postOpt = postQueryService.findById(postId);
-        Optional<User> byId = userQueryService.findById(id);
+        Optional<User> byId = userQueryService.findById(dto.idAuthor());
 
         if (postOpt.isEmpty() || byId.isEmpty()) {
             return ResponseEntity.notFound().build();
