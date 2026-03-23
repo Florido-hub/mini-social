@@ -1,4 +1,10 @@
 package com.florido.workshopmongo.query.post;
 
-public class PostDTO {
+import java.util.Date;
+
+public record PostDTO(
+        Date date,
+        String title,
+        String body
+) {
 }

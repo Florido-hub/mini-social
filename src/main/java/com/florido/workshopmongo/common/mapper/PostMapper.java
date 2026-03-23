@@ -1,13 +1,13 @@
 package com.florido.workshopmongo.common.mapper;
 
-import com.florido.workshopmongo.common.model.document.User;
-import com.florido.workshopmongo.query.user.UserDTO;
+import com.florido.workshopmongo.common.model.document.Post;
+import com.florido.workshopmongo.query.post.PostDTO;
 import org.mapstruct.Mapper;
 
 @Mapper(componentModel = "spring")
 public interface PostMapper {
 
-    UserDTO toDto(User user);
+    PostDTO toDto(Post post);
 
-    User toModel(UserDTO usetDTO);
+    Post toModel(PostDTO postDTO);
 }
