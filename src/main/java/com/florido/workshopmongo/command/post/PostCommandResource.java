@@ -4,7 +4,6 @@ import com.florido.workshopmongo.common.mapper.PostMapper;
 import com.florido.workshopmongo.common.model.document.Comment;
 import com.florido.workshopmongo.common.model.document.Post;
 import com.florido.workshopmongo.common.resource.GenericResource;
-import com.florido.workshopmongo.query.post.PostDTO;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -22,11 +21,23 @@ public class PostCommandResource implements GenericResource {
     private final PostMapper postMapper;
 
     @PostMapping
-    public ResponseEntity<PostDTO> createPost(
+    public ResponseEntity<Void> createPost(
             @RequestBody @Valid PostCommandDTO dto) {
         Post post = postCommandService.createPost(dto);
 
-        return ResponseEntity.created(URI.create(post.getId())).body(postMapper.toDto(post));
+        URI location = createHeaderLocation(post.getId());
+
+        return ResponseEntity.created(location).build();
+    }
+
+    @PatchMapping("/{postId}")
+    public ResponseEntity<Void> updatePost(
+            @PathVariable String postId,
+            @RequestBody PostCommandDTO dto
+    ){
+        Post post = postCommandService.updatePost(postId, dto);
+
+        return ResponseEntity.noContent().build();
     }
 
     @DeleteMapping("/{postId}/{userId}")
