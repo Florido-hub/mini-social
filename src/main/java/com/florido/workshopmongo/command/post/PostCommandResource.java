@@ -23,10 +23,19 @@ public class PostCommandResource implements GenericResource {
 
     @PostMapping
     public ResponseEntity<PostDTO> createPost(
-            @RequestBody PostCommandDTO dto) {
+            @RequestBody @Valid PostCommandDTO dto) {
         Post post = postCommandService.createPost(dto);
 
         return ResponseEntity.created(URI.create(post.getId())).body(postMapper.toDto(post));
+    }
+
+    @DeleteMapping("/{postId}/{userId}")
+    public ResponseEntity<Void> deletePost(
+            @PathVariable String postId,
+            @PathVariable String userId) {
+        postCommandService.deletePost(postId, userId);
+
+        return ResponseEntity.noContent().build();
     }
 
     @PostMapping("/{postId}/comments")
