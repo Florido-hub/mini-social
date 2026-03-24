@@ -10,6 +10,7 @@ import java.util.Date;
 @RequiredArgsConstructor
 public class Comment{
 
+    private String id;
     private String text;
     private Date date;
     private AuthorDTO author;

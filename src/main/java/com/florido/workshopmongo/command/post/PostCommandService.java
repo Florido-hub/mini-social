@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 
 import java.util.Date;
+import java.util.List;
 
 @Service
 @RequiredArgsConstructor
@@ -80,5 +81,16 @@ public class PostCommandService {
         postRepository.save(post);
 
         return comment;
+    }
+
+    public void deleteComment(String postId, String commentsId) {
+        Post post = postRepository.findById(postId)
+                .orElseThrow(() -> new RuntimeException("Post not found"));
+
+        post.getComments().removeIf(comment ->
+                comment.getId() != null && comment.getId().equals(commentsId)
+        );
+
+        postRepository.save(post);
     }
 }
