@@ -21,7 +21,7 @@ public class PostCommandResource implements GenericResource {
     private final PostCommandService postCommandService;
     private final PostMapper postMapper;
 
-    @PostMapping()
+    @PostMapping
     public ResponseEntity<PostDTO> createPost(
             @RequestBody PostCommandDTO dto) {
         Post post = postCommandService.createPost(dto);
@@ -31,8 +31,8 @@ public class PostCommandResource implements GenericResource {
 
     @PostMapping("/{postId}/comments")
     public ResponseEntity<Comment> createComment(
-            @PathVariable("postId") String postId,
-            @RequestBody CommentDTO dto){
+            @PathVariable String postId,
+            @RequestBody @Valid CommentDTO dto){
         Comment comment = postCommandService.createComment(dto, postId);
 
         return ResponseEntity.status(HttpStatus.CREATED).body(comment);
