@@ -57,4 +57,22 @@ public class PostCommandResource implements GenericResource {
 
         return ResponseEntity.status(HttpStatus.CREATED).body(comment);
     }
+
+    @PatchMapping("/{postId}/comments")
+    public ResponseEntity<Void> updateComment(
+            @PathVariable String postId,
+            @RequestBody CommentDTO dto
+    ){
+        return ResponseEntity.ok().build();
+    }
+
+    @DeleteMapping("{postId}/comments/{commentsId}")
+    public ResponseEntity<Void> deleteComment(
+            @PathVariable String postId,
+            @PathVariable String commentsId
+    ){
+        postCommandService.deleteComment(postId, commentsId);
+
+        return ResponseEntity.ok().build();
+    }
 }
