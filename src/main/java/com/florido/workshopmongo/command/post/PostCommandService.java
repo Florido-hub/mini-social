@@ -7,14 +7,8 @@ import com.florido.workshopmongo.common.model.document.Post;
 import com.florido.workshopmongo.common.model.document.User;
 import com.florido.workshopmongo.common.repository.PostRepository;
 import com.florido.workshopmongo.common.repository.UserRepository;
-import com.florido.workshopmongo.query.post.AuthorDTO;
-import com.florido.workshopmongo.query.post.PostDTO;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
-
-import java.util.Date;
-import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -29,12 +23,12 @@ public class PostCommandService {
                 .orElseThrow();
 
         Post post = PostFactory.create(dto, user);
+        Post save = postRepository.save(post);
 
-        user.getPosts().add(post);
-
+        user.getPosts().add(save);
         userRepository.save(user);
 
-        return postRepository.save(post);
+        return save;
     }
 
     public Comment createComment(CommentDTO dto, String postId){
