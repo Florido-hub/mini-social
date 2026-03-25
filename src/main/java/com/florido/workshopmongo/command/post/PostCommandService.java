@@ -1,5 +1,7 @@
 package com.florido.workshopmongo.command.post;
 
+import com.florido.workshopmongo.common.exceptions.NotFoundException;
+import com.florido.workshopmongo.common.exceptions.UserNotAuthorizedException;
 import com.florido.workshopmongo.common.factories.CommentFactory;
 import com.florido.workshopmongo.common.factories.PostFactory;
 import com.florido.workshopmongo.common.model.document.Comment;
@@ -7,15 +9,10 @@ import com.florido.workshopmongo.common.model.document.Post;
 import com.florido.workshopmongo.common.model.document.User;
 import com.florido.workshopmongo.common.repository.PostRepository;
 import com.florido.workshopmongo.common.repository.UserRepository;
-import com.florido.workshopmongo.query.user.UserDTO;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.PathVariable;
 
 import java.util.Date;
-import java.util.List;
 
 @Service
 @RequiredArgsConstructor
@@ -39,10 +36,10 @@ public class PostCommandService {
 
     public Post updatePost(String id, PostCommandDTO dto) {
         Post post = postRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Post not found"));
+                .orElseThrow(() -> new NotFoundException("Post não  encontrado"));
 
         if (!post.getAuthor().id().equals(dto.idAuthor())) {
-            throw new RuntimeException("Usuário não autorizado a editar este post");
+            throw new UserNotAuthorizedException("Usuário não autorizado a editar este post");
         }
         if (dto.title() != null) {
             post.setTitle(dto.title());
@@ -58,9 +55,9 @@ public class PostCommandService {
 
     public void deletePost(String postId, String userId) {
         Post post = postRepository.findById(postId)
-                .orElseThrow(() -> new RuntimeException("Post not found"));
+                .orElseThrow(() -> new NotFoundException("Post not found"));
         User user = userRepository.findById(userId)
-                .orElseThrow(() -> new RuntimeException("User not found"));
+                .orElseThrow(() -> new NotFoundException("User not found"));
 
         user.getPosts().remove(post);
         userRepository.save(user);
@@ -70,10 +67,10 @@ public class PostCommandService {
 
     public Comment createComment(CommentDTO dto, String postId){
         Post post = postRepository.findById(postId)
-                .orElseThrow(() -> new RuntimeException("Post not found"));
+                .orElseThrow(() -> new NotFoundException("Post not found"));
 
         User user = userRepository.findById(dto.idAuthor())
-                .orElseThrow(() -> new RuntimeException("User not found"));
+                .orElseThrow(() -> new NotFoundException("User not found"));
 
         Comment comment = CommentFactory.create(dto, user);
 
@@ -85,7 +82,7 @@ public class PostCommandService {
 
     public void deleteComment(String postId, String commentsId) {
         Post post = postRepository.findById(postId)
-                .orElseThrow(() -> new RuntimeException("Post not found"));
+                .orElseThrow(() -> new NotFoundException("Post not found"));
 
         post.getComments().removeIf(comment ->
                 comment.getId() != null && comment.getId().equals(commentsId)
