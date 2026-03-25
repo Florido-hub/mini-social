@@ -84,9 +84,7 @@ public class PostCommandService {
         Post post = postRepository.findById(postId)
                 .orElseThrow(() -> new NotFoundException("Post not found"));
 
-        post.getComments().removeIf(comment ->
-                comment.getId() != null && comment.getId().equals(commentsId)
-        );
+        post.getComments().removeIf(comment -> comment.getId().equals(commentsId));
 
         postRepository.save(post);
     }
