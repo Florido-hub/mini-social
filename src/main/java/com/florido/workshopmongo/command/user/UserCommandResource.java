@@ -20,8 +20,8 @@ public class UserCommandResource {
     private final UserMapper userMapper;
 
     @PostMapping
-    public ResponseEntity<Void> create(@RequestBody UserDTO userDTO) {
-        User user = userMapper.toModel(userDTO);
+    public ResponseEntity<Void> create(@RequestBody UserCommandDTO userDTO) {
+        User user = userMapper.toEntity(userDTO);
 
         User userCreated = userCommandService.create(user);
         String id = userCreated.getId();

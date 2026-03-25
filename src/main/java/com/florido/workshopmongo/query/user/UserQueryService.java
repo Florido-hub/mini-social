@@ -1,5 +1,6 @@
 package com.florido.workshopmongo.query.user;
 
+import com.florido.workshopmongo.common.exceptions.NotFoundException;
 import com.florido.workshopmongo.common.model.document.User;
 import com.florido.workshopmongo.common.repository.UserRepository;
 import org.springframework.data.domain.Page;
@@ -27,8 +28,8 @@ public class UserQueryService {
         return userRepository.findById(id);
     }
 
-    public Optional<User> findByUsername(String username) {
-        return userRepository.findByName(username);
+    public User findByUsername(String username) {
+        return userRepository.findByName(username).orElseThrow(()-> new NotFoundException("not found"));
     }
 
     public Optional<User> findByEmail(String email) {

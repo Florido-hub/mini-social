@@ -1,5 +1,6 @@
 package com.florido.workshopmongo.query.user;
 
+import com.florido.workshopmongo.common.exceptions.NotFoundException;
 import com.florido.workshopmongo.common.mapper.PostMapper;
 import com.florido.workshopmongo.common.mapper.UserMapper;
 import com.florido.workshopmongo.common.model.document.Post;
@@ -58,13 +59,7 @@ public class UserQueryResource {
 
     @GetMapping("/username/{username}")
     public ResponseEntity<UserDTO> getByUsername(@PathVariable String username) {
-        Optional<User> userOpt = userQueryService.findByUsername(username);
-
-        if (userOpt.isEmpty()) {
-            return ResponseEntity.notFound().build();
-        }
-
-        User user = userOpt.get();
+        User user = userQueryService.findByUsername(username);
 
         UserDTO userDTO = userMapper.toDto(user);
 

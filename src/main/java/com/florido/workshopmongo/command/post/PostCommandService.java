@@ -10,6 +10,7 @@ import com.florido.workshopmongo.common.model.document.User;
 import com.florido.workshopmongo.common.repository.PostRepository;
 import com.florido.workshopmongo.common.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
 
 import java.util.Date;
@@ -21,9 +22,9 @@ public class PostCommandService {
     private final PostRepository postRepository;
     private final UserRepository userRepository;
 
-    public Post createPost(PostCommandDTO dto) {
-        User user = userRepository.findById(dto.idAuthor())
-                .orElseThrow(() -> new RuntimeException("Post not found"));
+    public Post createPost(PostCommandDTO dto, Authentication auth) {
+        User user = userRepository.findByName(auth.getName())
+                .orElseThrow(() -> new RuntimeException("User not found"));
 
         Post post = PostFactory.create(dto, user);
         Post save = postRepository.save(post);
@@ -34,11 +35,13 @@ public class PostCommandService {
         return save;
     }
 
-    public Post updatePost(String id, PostCommandDTO dto) {
+    public Post updatePost(String id, PostCommandDTO dto, Authentication auth) {
         Post post = postRepository.findById(id)
                 .orElseThrow(() -> new NotFoundException("Post não  encontrado"));
 
-        if (!post.getAuthor().id().equals(dto.idAuthor())) {
+        User user = userRepository.findByName(auth.getName()).orElseThrow(() -> new NotFoundException("User Not Found"));
+
+        if (!post.getAuthor().id().equals(user.getId())) {
             throw new UserNotAuthorizedException("Usuário não autorizado a editar este post");
         }
         if (dto.title() != null) {
@@ -84,9 +87,7 @@ public class PostCommandService {
         Post post = postRepository.findById(postId)
                 .orElseThrow(() -> new NotFoundException("Post not found"));
 
-        post.getComments().removeIf(comment ->
-                comment.getId() != null && comment.getId().equals(commentsId)
-        );
+        post.getComments().removeIf(comment -> comment.getId().equals(commentsId));
 
         postRepository.save(post);
     }

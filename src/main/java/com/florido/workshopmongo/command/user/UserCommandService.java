@@ -4,6 +4,7 @@ import com.florido.workshopmongo.common.model.document.User;
 import com.florido.workshopmongo.query.user.UserDTO;
 import com.florido.workshopmongo.common.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.Objects;
@@ -14,8 +15,12 @@ import java.util.Optional;
 public class UserCommandService {
 
     private final UserRepository userRepository;
+    private final PasswordEncoder encoder;
 
     public User create(User user) {
+        String password = user.getPassword();
+
+        user.setPassword(encoder.encode(password));
         return userRepository.save(user);
     }
     

@@ -1,6 +1,7 @@
 package com.florido.workshopmongo.common.model.document;
 
 
+import com.florido.workshopmongo.common.model.enums.RoleName;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.springframework.data.annotation.Id;
@@ -22,6 +23,7 @@ public class User implements Serializable {
     private String id;
     private String name;
     private String email;
+    private String password;
 
     @DBRef(lazy = true)
     private List<Post> posts = new ArrayList<>();
