@@ -56,12 +56,14 @@ public class PostCommandService {
         return post;
     }
 
-    public void deletePost(String postId, String userId) {
+    public void deletePost(String postId, Authentication auth) {
         Post post = postRepository.findById(postId)
                 .orElseThrow(() -> new NotFoundException("Post not found"));
-        User user = userRepository.findById(userId)
+        User user = userRepository.findByName(auth.getName())
                 .orElseThrow(() -> new NotFoundException("User not found"));
-
+        if (!post.getAuthor().id().equals(user.getId())) {
+            throw new UserNotAuthorizedException("Você n pode excluir o post de outra pessoa, SEU BABACA!");
+        }
         user.getPosts().remove(post);
         userRepository.save(user);
 

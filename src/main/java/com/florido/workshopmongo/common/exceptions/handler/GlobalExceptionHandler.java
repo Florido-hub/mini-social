@@ -36,7 +36,7 @@ public class GlobalExceptionHandler {
     public ErroResponse HandleUserNotAuthorizedException(UserNotAuthorizedException e){
         return new ErroResponse(
                 HttpStatus.FORBIDDEN.value(),
-                "Acesso negado!",
+                e.getMessage(),
                 List.of());
     }
 

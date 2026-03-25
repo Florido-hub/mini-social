@@ -42,11 +42,11 @@ public class PostCommandResource implements GenericResource {
         return ResponseEntity.noContent().build();
     }
 
-    @DeleteMapping("/{postId}/{userId}")
+    @DeleteMapping("/{postId}")
     public ResponseEntity<Void> deletePost(
             @PathVariable String postId,
             Authentication auth) {
-        postCommandService.deletePost(postId, userId);
+        postCommandService.deletePost(postId, auth);
 
         return ResponseEntity.noContent().build();
     }
