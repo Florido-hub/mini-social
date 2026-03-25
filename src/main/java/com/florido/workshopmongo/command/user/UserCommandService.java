@@ -1,16 +1,22 @@
 package com.florido.workshopmongo.command.user;
 
+import com.florido.workshopmongo.common.exceptions.NotFoundException;
 import com.florido.workshopmongo.common.exceptions.RegistroDuplicadoException;
+import com.florido.workshopmongo.common.exceptions.UserNotAuthorizedException;
+import com.florido.workshopmongo.common.model.document.Post;
 import com.florido.workshopmongo.common.model.document.User;
-import com.florido.workshopmongo.query.user.UserDTO;
+import com.florido.workshopmongo.common.repository.PostRepository;
 import com.florido.workshopmongo.common.repository.UserRepository;
+import com.florido.workshopmongo.query.post.AuthorDTO;
+import com.florido.workshopmongo.query.user.UserDTO;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Objects;
-import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -18,6 +24,7 @@ public class UserCommandService {
 
     private final UserRepository userRepository;
     private final PasswordEncoder encoder;
+    private final PostRepository postRepository;
 
     public User create(User user) {
         if(userRepository.existsByEmailOrName(user.getEmail(),user.getName())){
@@ -60,35 +67,20 @@ public class UserCommandService {
     }
 
     public User deleteById(String id) {
-        if (id.isBlank()) {
-            throw new RuntimeException("id can't be blank");
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        String loggedUsername = auth.getName();
+
+        User user = userRepository.findById(id)
+                .orElseThrow(() -> new NotFoundException("User not found"));
+
+        if (!user.getEmail().equals(loggedUsername)) {
+            throw new UserNotAuthorizedException("Você não pode deletar a conta de outra pessoa");
         }
 
-        Optional<User> userOpt = userRepository.findById(id);
+        List<Post> posts = postRepository.findByAuthor(new AuthorDTO(user));
+        postRepository.deleteAll(posts);
 
-        if (userOpt.isEmpty()) {
-            throw new RuntimeException("user with id " + id + " not found");
-        }
-
-        User user = userOpt.get();
-        userRepository.deleteById(id);
-
-        return user;
-    }
-
-    public User deleteByUsername(String username) {
-        if (username.isBlank()) {
-            throw new RuntimeException("username can't be blank");
-        }
-
-        Optional<User> userOpt = userRepository.findByName(username);
-
-        if (userOpt.isEmpty()) {
-            throw new RuntimeException("user with username " + username + " not found");
-        }
-
-        User user = userOpt.get();
-        userRepository.deleteUserByName(username);
+        userRepository.delete(user);
 
         return user;
     }

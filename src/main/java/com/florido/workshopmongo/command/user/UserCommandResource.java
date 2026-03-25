@@ -55,6 +55,6 @@ public class UserCommandResource {
 
         UserDTO responseBody = userMapper.toDto(deleted);
 
-        return ResponseEntity.ok(responseBody);
+        return ResponseEntity.noContent().build();
     }
 }

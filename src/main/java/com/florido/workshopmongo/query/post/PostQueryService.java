@@ -1,13 +1,16 @@
 package com.florido.workshopmongo.query.post;
 
 import com.florido.workshopmongo.common.model.document.Post;
+import com.florido.workshopmongo.common.model.document.User;
 import com.florido.workshopmongo.common.repository.PostRepository;
+import com.florido.workshopmongo.query.user.UserDTO;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
 import java.util.Optional;
 
 @Service
