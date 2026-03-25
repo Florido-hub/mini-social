@@ -28,8 +28,8 @@ public class UserQueryService {
         return userRepository.findById(id);
     }
 
-    public User findByUsername(String username) {
-        return userRepository.findByName(username).orElseThrow(()-> new NotFoundException("not found"));
+    public Optional<User> findByUsername(String username) {
+        return userRepository.findByName(username);
     }
 
     public Optional<User> findByEmail(String email) {

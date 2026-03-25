@@ -1,5 +1,6 @@
 package com.florido.workshopmongo.config.security;
 
+import com.florido.workshopmongo.common.exceptions.NotFoundException;
 import com.florido.workshopmongo.common.model.document.User;
 import com.florido.workshopmongo.query.user.UserQueryService;
 import lombok.RequiredArgsConstructor;
@@ -19,8 +20,8 @@ public class SecurityService {
 
         UserDetails userDetails = (UserDetails) authentication.getPrincipal();
 
-        String name =  userDetails.getUsername();
+        String email =  userDetails.getUsername();
 
-        return usuarioService.findByUsername(name);
+        return usuarioService.findByEmail(email).orElseThrow(()-> new NotFoundException("not found"));
     }
 }

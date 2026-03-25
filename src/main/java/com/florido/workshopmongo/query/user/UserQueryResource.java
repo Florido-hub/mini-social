@@ -59,7 +59,7 @@ public class UserQueryResource {
 
     @GetMapping("/username/{username}")
     public ResponseEntity<UserDTO> getByUsername(@PathVariable String username) {
-        User user = userQueryService.findByUsername(username);
+        User user = userQueryService.findByUsername(username).orElseThrow(()-> new NotFoundException("User not found"));;
 
         UserDTO userDTO = userMapper.toDto(user);
 
