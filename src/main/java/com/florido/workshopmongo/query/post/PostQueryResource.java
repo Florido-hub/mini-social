@@ -37,9 +37,9 @@ public class PostQueryResource {
         return ResponseEntity.ok().body(pagedModel);
     }
 
-    @GetMapping("/id/{id}")
-    public ResponseEntity<PostDTO> getById(@PathVariable String id) {
-        Optional<Post> postOpt = postQueryService.findById(id);
+    @GetMapping("/id/{postId}")
+    public ResponseEntity<PostDTO> getById(@PathVariable String postId) {
+        Optional<Post> postOpt = postQueryService.findById(postId);
 
         if (postOpt.isEmpty()) {
             return ResponseEntity.notFound().build();

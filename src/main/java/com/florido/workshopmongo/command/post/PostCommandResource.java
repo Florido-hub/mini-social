@@ -1,6 +1,5 @@
 package com.florido.workshopmongo.command.post;
 
-import com.florido.workshopmongo.common.mapper.PostMapper;
 import com.florido.workshopmongo.common.model.document.Comment;
 import com.florido.workshopmongo.common.model.document.Post;
 import com.florido.workshopmongo.common.resource.GenericResource;
@@ -18,7 +17,6 @@ import java.net.URI;
 public class PostCommandResource implements GenericResource {
 
     private final PostCommandService postCommandService;
-    private final PostMapper postMapper;
 
     @PostMapping
     public ResponseEntity<Void> createPost(
@@ -63,7 +61,7 @@ public class PostCommandResource implements GenericResource {
             @PathVariable String postId,
             @RequestBody CommentDTO dto
     ){
-        return ResponseEntity.ok().build();
+        return ResponseEntity.noContent().build();
     }
 
     @DeleteMapping("{postId}/comments/{commentsId}")
@@ -73,6 +71,6 @@ public class PostCommandResource implements GenericResource {
     ){
         postCommandService.deleteComment(postId, commentsId);
 
-        return ResponseEntity.ok().build();
+        return ResponseEntity.noContent().build();
     }
 }
