@@ -1,9 +1,11 @@
 package com.florido.workshopmongo.command.user;
 
+import com.florido.workshopmongo.common.exceptions.NotFoundException;
 import com.florido.workshopmongo.common.model.document.User;
 import com.florido.workshopmongo.query.user.UserDTO;
 import com.florido.workshopmongo.common.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -24,16 +26,10 @@ public class UserCommandService {
         return userRepository.save(user);
     }
     
-    public User update(String id, UserDTO patch) {
-        Objects.requireNonNull(id, "id can't be blank");
+    public User update(UserDTO patch, Authentication auth) {
+        Objects.requireNonNull(userRepository.findByEmail(auth.getName()), "id can't be blank");
 
-        Optional<User> userOpt = userRepository.findById(id);
-
-        if (userOpt.isEmpty()) {
-            throw new RuntimeException("user with id " + id + " not found");
-        }
-
-        User user = userOpt.get();
+        User user = userRepository.findByEmail(auth.getName()).orElseThrow(() -> new NotFoundException("user not found"));
 
         User merged = merge(user, patch);
         userRepository.save(merged);
