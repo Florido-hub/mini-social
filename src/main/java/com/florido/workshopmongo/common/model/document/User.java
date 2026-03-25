@@ -1,7 +1,6 @@
 package com.florido.workshopmongo.common.model.document;
 
 
-import com.florido.workshopmongo.common.model.enums.RoleName;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.springframework.data.annotation.Id;
