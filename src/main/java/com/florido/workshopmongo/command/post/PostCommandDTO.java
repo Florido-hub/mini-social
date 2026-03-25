@@ -8,9 +8,6 @@ public record PostCommandDTO(
         String title,
 
         @NotBlank(message = "Campo obrigatorio")
-        String body,
-
-        @NotBlank(message = "Campo obrigatorio")
-        String idAuthor
+        String body
 ) {
 }

@@ -7,6 +7,7 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
 import java.net.URI;
@@ -20,8 +21,10 @@ public class PostCommandResource implements GenericResource {
 
     @PostMapping
     public ResponseEntity<Void> createPost(
-            @RequestBody @Valid PostCommandDTO dto) {
-        Post post = postCommandService.createPost(dto);
+            @RequestBody @Valid PostCommandDTO dto,
+            Authentication auth
+    ) {
+        Post post = postCommandService.createPost(dto, auth);
 
         URI location = createHeaderLocation(post.getId());
 
@@ -31,9 +34,10 @@ public class PostCommandResource implements GenericResource {
     @PatchMapping("/{postId}")
     public ResponseEntity<Void> updatePost(
             @PathVariable String postId,
-            @RequestBody PostCommandDTO dto
+            @RequestBody PostCommandDTO dto,
+            Authentication auth
     ){
-        Post post = postCommandService.updatePost(postId, dto);
+        Post post = postCommandService.updatePost(postId, dto, auth);
 
         return ResponseEntity.noContent().build();
     }
@@ -41,7 +45,7 @@ public class PostCommandResource implements GenericResource {
     @DeleteMapping("/{postId}/{userId}")
     public ResponseEntity<Void> deletePost(
             @PathVariable String postId,
-            @PathVariable String userId) {
+            Authentication auth) {
         postCommandService.deletePost(postId, userId);
 
         return ResponseEntity.noContent().build();
