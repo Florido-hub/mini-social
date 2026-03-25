@@ -1,6 +1,6 @@
 package com.florido.workshopmongo.command.user;
 
-import com.florido.workshopmongo.common.exceptions.NotFoundException;
+import com.florido.workshopmongo.common.exceptions.RegistroDuplicadoException;
 import com.florido.workshopmongo.common.model.document.User;
 import com.florido.workshopmongo.query.user.UserDTO;
 import com.florido.workshopmongo.common.repository.UserRepository;
@@ -20,6 +20,9 @@ public class UserCommandService {
     private final PasswordEncoder encoder;
 
     public User create(User user) {
+        if(userRepository.existsByEmailOrName(user.getEmail(),user.getName())){
+            throw new RegistroDuplicadoException("nome de usuário ou email já estão em uso");
+        }
         String password = user.getPassword();
 
         user.setPassword(encoder.encode(password));

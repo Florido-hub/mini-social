@@ -3,6 +3,7 @@ package com.florido.workshopmongo.common.exceptions.handler;
 import com.florido.workshopmongo.common.exceptions.ErroDTOs.ErroCampo;
 import com.florido.workshopmongo.common.exceptions.ErroDTOs.ErroResponse;
 import com.florido.workshopmongo.common.exceptions.NotFoundException;
+import com.florido.workshopmongo.common.exceptions.RegistroDuplicadoException;
 import com.florido.workshopmongo.common.exceptions.UserNotAuthorizedException;
 import org.springframework.http.HttpStatus;
 import org.springframework.validation.FieldError;
@@ -44,5 +45,11 @@ public class GlobalExceptionHandler {
     @ResponseStatus(HttpStatus.NOT_FOUND)
     public ErroResponse HandleNotFoundException(NotFoundException e){
         return ErroResponse.notFound(e.getMessage());
+    }
+
+    @ExceptionHandler(RegistroDuplicadoException.class)
+    @ResponseStatus(HttpStatus.CONFLICT)
+    public ErroResponse HandleRegistroDuplicadoException(RegistroDuplicadoException e){
+        return ErroResponse.conflito(e.getMessage());
     }
 }
