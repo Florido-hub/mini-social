@@ -3,10 +3,12 @@ package com.florido.workshopmongo.command.user;
 import com.florido.workshopmongo.common.model.document.User;
 import com.florido.workshopmongo.query.user.UserDTO;
 import com.florido.workshopmongo.common.mapper.UserMapper;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ProblemDetail;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
 import java.net.URI;
@@ -20,7 +22,7 @@ public class UserCommandResource {
     private final UserMapper userMapper;
 
     @PostMapping
-    public ResponseEntity<Void> create(@RequestBody UserCommandDTO userDTO) {
+    public ResponseEntity<Void> create(@RequestBody @Valid UserCommandDTO userDTO) {
         User user = userMapper.toEntity(userDTO);
 
         User userCreated = userCommandService.create(user);
@@ -30,8 +32,10 @@ public class UserCommandResource {
     }
 
     @PatchMapping("/{id}")
-    public ResponseEntity<UserDTO> patch(@PathVariable String id, UserDTO patch) {
-        User updated = userCommandService.update(id, patch);
+    public ResponseEntity<UserDTO> patch(
+            @RequestBody UserDTO patch,
+            Authentication auth) {
+        User updated = userCommandService.update(patch, auth);
 
         UserDTO responseBody = userMapper.toDto(updated);
 

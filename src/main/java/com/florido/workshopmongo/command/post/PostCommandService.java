@@ -23,7 +23,7 @@ public class PostCommandService {
     private final UserRepository userRepository;
 
     public Post createPost(PostCommandDTO dto, Authentication auth) {
-        User user = userRepository.findByName(auth.getName())
+        User user = userRepository.findByEmail(auth.getName())
                 .orElseThrow(() -> new RuntimeException("User not found"));
 
         Post post = PostFactory.create(dto, user);
@@ -39,7 +39,7 @@ public class PostCommandService {
         Post post = postRepository.findById(id)
                 .orElseThrow(() -> new NotFoundException("Post não  encontrado"));
 
-        User user = userRepository.findByName(auth.getName()).orElseThrow(() -> new NotFoundException("User Not Found"));
+        User user = userRepository.findByEmail(auth.getName()).orElseThrow(() -> new NotFoundException("User Not Found"));
 
         if (!post.getAuthor().id().equals(user.getId())) {
             throw new UserNotAuthorizedException("Usuário não autorizado a editar este post");
@@ -59,7 +59,7 @@ public class PostCommandService {
     public void deletePost(String postId, Authentication auth) {
         Post post = postRepository.findById(postId)
                 .orElseThrow(() -> new NotFoundException("Post not found"));
-        User user = userRepository.findByName(auth.getName())
+        User user = userRepository.findByEmail(auth.getName())
                 .orElseThrow(() -> new NotFoundException("User not found"));
         if (!post.getAuthor().id().equals(user.getId())) {
             throw new UserNotAuthorizedException("Você n pode excluir o post de outra pessoa, SEU BABACA!");
