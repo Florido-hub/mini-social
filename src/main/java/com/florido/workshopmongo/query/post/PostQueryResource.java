@@ -8,11 +8,9 @@ import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PagedModel;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
+import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
@@ -50,5 +48,18 @@ public class PostQueryResource {
         PostDTO postDto = postMapper.toDto(post);
 
         return ResponseEntity.ok(postDto);
+    }
+
+    @GetMapping
+    public ResponseEntity<PagedModel<PostDTO>> getByDate(Pageable pageRequest, @RequestParam Date date) {
+        Page<Post> page = postQueryService.findByDate(date, pageRequest);
+
+        List<PostDTO> postDto = page.getContent().stream().map(postMapper::toDto).toList();
+
+        Page<PostDTO> pageDto = new PageImpl<>(postDto, page.getPageable(), page.getTotalElements());
+
+        PagedModel<PostDTO> pagedModel = new PagedModel<>(pageDto);
+
+        return ResponseEntity.ok().body(pagedModel);
     }
 }
