@@ -30,6 +30,6 @@ public class PostQueryService {
     }
 
     public Page<Post> findByDate(Date date, Pageable pageable) {
-        return postRepository.findByDate(date, Pageable pageable);
+        return postRepository.findByDate(date, pageable);
     }
 }
