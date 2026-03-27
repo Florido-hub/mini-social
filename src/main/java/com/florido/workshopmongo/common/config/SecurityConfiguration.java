@@ -1,6 +1,6 @@
-package com.florido.workshopmongo.config;
+package com.florido.workshopmongo.common.config;
 
-import com.florido.workshopmongo.config.security.CustomUserDetailsService;
+import com.florido.workshopmongo.common.config.security.CustomUserDetailsService;
 import com.florido.workshopmongo.query.user.UserQueryService;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

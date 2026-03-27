@@ -1,4 +1,4 @@
-package com.florido.workshopmongo.config.security;
+package com.florido.workshopmongo.common.config.security;
 
 import com.florido.workshopmongo.common.exceptions.NotFoundException;
 import com.florido.workshopmongo.common.model.document.User;
